@@ -1,0 +1,11 @@
+{
+   "id":"Phil",
+   "name":"Phil's Awesome Mod",
+   "display_name":"Phil's Awesome Mod",
+   "author":[
+      "EvilJohn"
+   ],
+   "description":"awesome",
+   "prefix":"phil",
+   "main_file":"phil.lua"
+}
