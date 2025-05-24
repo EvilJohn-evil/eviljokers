@@ -1,3 +1,9 @@
+SMODS.current_mod.optional_features = function()
+    return {
+        quantum_enhancements = true
+    }
+end
+
 
 SMODS.Atlas {
         key = 'Jokers',
@@ -86,7 +92,7 @@ SMODS.Rarity {
             text = {
                 'Gains {X:mult,C:white}X0.2{} Mult if played hand is a {C:attention}#3#{}',
                 'hand changes every round (Currently at {X:mult,C:white}X#1#{} Mult).',
-                '{X:black,C:white}Changes{} at {X:mult,C:white}X3{} Mult'
+                '{X:black,C:white}Transforms{} at {X:mult,C:white}X3{} Mult'
             }
         },
 
@@ -108,7 +114,7 @@ SMODS.Rarity {
                 }
             end
             if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
-                if card.ability.extra.Xmult > 3 then
+                if card.ability.extra.Xmult >= 3 then
                     return {
                         message = "Let's Rock!"
                     },
@@ -271,4 +277,43 @@ SMODS.Rarity {
 
     }
 
+
+    SMODS.Joker {
+        key = 'kiln',
+        atlas = 'Jokers',
+        pos = { x = 3, y = 0},
+        discovered = true,
+        rarity = 3,
+        cost = 8,
+        
+        config = { extra = {
+            Xmult = 2,
+            odds = 4
+
+        }
+        },
+
+        loc_vars = function(self, info_queue, card)
+            info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
+            info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
+            return { vars = {card.ability.extra.Xmult, (G.GAME and G.GAME.probabilities.normal or 1), card.ability.extra.odds }}
+        end,
+
+        loc_txt = {
+            name = "Kiln",
+            text = {
+                "All played {C:attention}Stone Cards{}",
+                "function as {C:attention}Glass Cards{}"
+
+            }
+        },
+
+        calculate = function(self, card, context)
+            if context.check_enhancement then
+                if context.other_card.config.center.key == "m_stone" then
+                    return {m_glass = true}
+                end
+            end
+        end
+    }
     --MODCODE END--
